@@ -1,0 +1,19 @@
+*{
+	margin: auto;
+	padding:0;
+}
+.login{
+	width: 200px;
+	margin-top: 200px;
+}
+.login .login-form{
+	background: rgba(0,0,0,0.7);
+	border-radius: 5px;
+	padding: 20px;
+	box-shadow: 0 10px 10px 0;
+}
+.login .login-form .login-form-button{
+	width: 100%;
+	padding-left: 10px;
+
+}
