@@ -1,6 +1,9 @@
 import React,{ Component } from 'react';
 import Login from 'pages/login/';
 import Home from 'pages/home/';
+import User from 'pages/user/';
+import ErrorPage from 'common/errorpage/';
+
 import { getUserName } from 'util'
 
 import {
@@ -13,7 +16,7 @@ import {
 } from "react-router-dom";
 class App extends Component{
 	render(){
-		const ProtectedRouter = ({component:Component,...rest})=>(
+		const ProtectedRoute = ({component:Component,...rest})=>(
 			<Route 
 				{...rest}
 				render = {props=>(
@@ -24,7 +27,7 @@ class App extends Component{
 			/>
 		)
 
-		const LoginRouter =({component:Component,...rest})=>{
+		const LoginRoute =({component:Component,...rest})=>{
 			if(getUserName()){
 				return <Redirect to="/" />
 			}else{
@@ -34,9 +37,13 @@ class App extends Component{
 		//return 只能返回一个
 		return(
 			<Router>
-				<div className="App">	
-					<ProtectedRouter exact path="/" component={ Home } />				
-					<LoginRouter path="/login" component={ Login } />
+				<div className="App">
+					<Switch>	
+						<ProtectedRoute exact path="/" component={ Home } />
+						<ProtectedRoute path="/user" component={ User } />				
+						<LoginRoute path="/login" component={ Login } />
+						<Route component={ ErrorPage } />
+					</Switch>
 				</div>		
 			</Router>		
 		)

@@ -1,8 +1,6 @@
-*{
-	margin: auto;
-	padding:0;
-}
+
 .login{
+	margin: auto auto;
 	width: 200px;
 	margin-top: 200px;
 }

@@ -2,8 +2,8 @@ import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import { Form, Icon, Input, Button, message } from 'antd';
 import axios from 'axios';
-import { actionCreator } from './store';
 import './index.css';
+import { actionCreator } from './store';
 
 
 const FormItem = Form.Item;
