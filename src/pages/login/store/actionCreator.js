@@ -1,4 +1,3 @@
-
 import { message } from 'antd';
 import * as types from './actionTypes.js';
 import { Request,setUserName   } from 'util';
