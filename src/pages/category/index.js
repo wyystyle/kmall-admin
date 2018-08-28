@@ -12,7 +12,7 @@ class Category extends Component{
 	
 			<Switch>
 				<Route path='/category/add' component={ CategoryAdd } />
-				<Route path='/category' component={ CategoryList } />
+				<Route path='/category/:pid?' component={ CategoryList } />
 			</Switch>
 		)
 	}

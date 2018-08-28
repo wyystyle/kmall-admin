@@ -7,10 +7,13 @@ import { actionCreator } from './store';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-class Category_List extends Component{
+class Category_Add extends Component{
 	constructor(props){
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	componentDidMount(){
+		this.props.getLevelOneCategory()
 	}
 	handleSubmit (e){
 		e.preventDefault();
@@ -73,9 +76,14 @@ class Category_List extends Component{
 				              required: true, message: '请选择父级分类',
 				            }],
 				          })(
-					    <Select initialValue="lucy" style={{ width: 120 }}>
+					    <Select initialValue="lucy" style={{ width: 300 }}>
 					      <Option value="0">根分类</Option>
-					      <Option value="1">一级分类</Option>
+					      {
+					      	this.props.OneLevelCategories.map((categories)=>{
+					      		return <Option key={ categories.get('_id') } value={ categories.get('_id') }>根分类/{ categories.get('name') }</Option>
+					      	})
+
+					      }
 					    </Select>
 				          )}
 				        </FormItem>
@@ -98,15 +106,19 @@ class Category_List extends Component{
 }
 const mapStateToProps=(state)=>{
 	return {
-		isAddFetching:state.get('category').get('isAddFetching')
+		isAddFetching:state.get('category').get('isAddFetching'),
+		OneLevelCategories:state.get('category').get('OneLevelCategories')	
 	}	
 }
 const mapDispatchToProps=(dispatch)=>{
 	return {
 		getAddRequire:(values)=>{
 			dispatch(actionCreator.getAddAction(values))
+		},
+		getLevelOneCategory:()=>{
+			dispatch(actionCreator.getLevelOneCategoryAction())
 		}
 	}
 }
-const CategoryList = Form.create()(Category_List);
-export default connect(mapStateToProps,mapDispatchToProps)(CategoryList)
+const CategoryAdd = Form.create()(Category_Add);
+export default connect(mapStateToProps,mapDispatchToProps)(CategoryAdd)
