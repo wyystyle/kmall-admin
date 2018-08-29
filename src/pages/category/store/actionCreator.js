@@ -110,6 +110,7 @@ export const getPageCategoryAction = (pid,page)=>{
 		})
 
 		.then((result)=>{
+			console.log('aaaaaaaaa',result)
 			if(result.code == 0){
 				dispatch(getSetPage(result.data))
 			}else{

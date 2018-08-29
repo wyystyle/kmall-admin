@@ -17,20 +17,21 @@ class CategoryList extends Component{
 		this.props.getPageData(this.state.pid,1)
 	}                                               
 	componentDidUpdate(preProps,preState){
-		let oldpid = preProps.location.pathname;
-		let newpid = this.props.location.pathname;
-		if(oldpid != newpid){
+		let oldpath = preProps.location.pathname;
+		let newpath = this.props.location.pathname;
+		if(oldpath != newpath){
 			let newPid = this.props.match.params.pid || 0;
 			this.setState({
 				pid:newPid
 			},()=>{
-				this.props.getPageData(newpid,1)
+				this.props.getPageData(newPid,1)
 			})
 		}
 	}
 
 	render(){
 		const pid = this.state.pid;
+
 		const columns = [{
 		  title: 'id',
 		  dataIndex: 'id',
@@ -119,7 +120,7 @@ class CategoryList extends Component{
 					onOk={this.props.handleUpdateName}
 					onCancel={this.props.handleCancelName}
 				>
-					<p>Some contents...</p>
+					<p>{}</p>
 				</Modal>
 				</div>
 			</MyLayout>
