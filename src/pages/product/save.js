@@ -1,13 +1,16 @@
 
 import React,{ Component } from 'react';
-import { Breadcrumb,Form, Input,Select,Button } from "antd";
+import { Breadcrumb,Form, Input,Select,Button,InputNumber  } from "antd";
 import MyLayout from 'common/layout';
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
+import  CategorySlector  from './category-selector.js';
+import  UploadPicture  from 'common/add_img';
+
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-class Category_Add extends Component{
+class Product_Save extends Component{
 	constructor(props){
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -57,7 +60,7 @@ class Category_Add extends Component{
 					<Form style={{marginTop:30}}>
 				        <FormItem
 				          {...formItemLayout}
-				          label="分类名称"
+				          label="商品分类"
 				        >
 				          {getFieldDecorator('name', {
 				            rules: [{
@@ -65,8 +68,21 @@ class Category_Add extends Component{
 				            }],
 				          })(
 				            <Input 
-				            	style={{ width: 300 }}
-				            	placeholder="分类名称"
+				            	placeholder="商品分类"
+				            />
+				          )}
+				        </FormItem>
+				        <FormItem
+				          {...formItemLayout}
+				          label="商品描述"
+				        >
+				          {getFieldDecorator('Sketch', {
+				            rules: [{
+				              required: true, message: '请输入商品描述信息',
+				            }],
+				          })(
+				            <Input 
+				            	
 				            />
 				          )}
 				        </FormItem>
@@ -74,23 +90,61 @@ class Category_Add extends Component{
 				          {...formItemLayout}
 				          label="选择分类"
 				        >
-				          {getFieldDecorator('pid', {
+				          <CategorySlector 
+				          	getCategoryId={(pid,id)=>{
+				          		console.log(pid,id)
+				          	}}
+				          />
+				        </FormItem>
+				        <FormItem
+				          {...formItemLayout}
+				          label="商品价格"
+				        >
+				          {getFieldDecorator('price', {
 				            rules: [{
-				              required: true, message: '请选择父级分类',
+				              required: true, message: '请输入商品价格',
 				            }],
 				          })(
-					    <Select initialValue="lucy" style={{ width: 300 }}>
-					      <Option value="0">根分类</Option>
-					      {
-					      	this.props.OneLevelCategories.map((categories)=>{
-					      		return <Option key={ categories.get('_id') } value={ categories.get('_id') }>根分类/{ categories.get('name') }</Option>
-					      	})
-
-					      }
-					    </Select>
+		               <InputNumber
+					      min={0}
+					      max={100}
+					      formatter={value => `${value}元`}
+					      parser={value => value.replace('元', '')}
+					      style={{ width: 300 }}
+					    />
 				          )}
 				        </FormItem>
+				        <FormItem
+				          {...formItemLayout}
+				          label="商品库存"
+				        >
+				          {getFieldDecorator('shopnum', {
+				            rules: [{
+				              required: true, message: '请输入商品库存数量',
+				            }],
+				          })(
+		               <InputNumber
+					      min={0}
+					      max={100}
+					      formatter={value => `${value}件`}
+					      parser={value => value.replace('件', '')}
+					      style={{ width: 300 }}
+					    />
+				          )}
+				        </FormItem>
+				        <FormItem
+				          {...formItemLayout}
+				          label="商品图片"
+				        >
+				        	<UploadPicture />
+				        	
+				        </FormItem>
+				        <FormItem
+				          {...formItemLayout}
+				          label="商品详情"
+				        >
 
+				        </FormItem>
 				        <FormItem {...tailFormItemLayout}>
 				          <Button 
 					          type="primary"
@@ -123,5 +177,5 @@ const mapDispatchToProps=(dispatch)=>{
 		}
 	}
 }
-const CategoryAdd = Form.create()(Category_Add);
-export default connect(mapStateToProps,mapDispatchToProps)(CategoryAdd)
+const ProductSave = Form.create()(Product_Save);
+export default connect(mapStateToProps,mapDispatchToProps)(ProductSave)

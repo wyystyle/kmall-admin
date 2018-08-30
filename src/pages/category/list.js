@@ -1,7 +1,7 @@
 
 import React,{ Component } from 'react';
 import { Route,Switch,Link } from "react-router-dom";
-import { Breadcrumb,Button,Table,Divider,Tag,InputNumber,Modal  } from "antd";
+import { Breadcrumb,Button,Table,Divider,Tag,InputNumber,Modal,Input  } from "antd";
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
 import MyLayout from 'common/layout';
@@ -45,7 +45,12 @@ class CategoryList extends Component{
 		  dataIndex: 'order',
 		  key: 'order',
 		  render:(order,record)=>{
-		  	return   <InputNumber   defaultValue={order} />
+		  	return   <InputNumber   
+		  	defaultValue={order} 
+		  	onBlur = {(e)=>{
+		  		this.props.handleOrder(pid,record.id,e.target.value)
+		  	}}
+		  	/>
 
 		  }
 		}, {
@@ -117,10 +122,17 @@ class CategoryList extends Component{
 				<Modal
 					title="修改分类名称"
 					visible={this.props.updateModalVisible}
-					onOk={this.props.handleUpdateName}
-					onCancel={this.props.handleCancelName}
+					onOk={()=>{this.props.handleUpdateName(this.state.pid)}}
+					onCancel={this.props.handleCloseUpdateModal}
+					okText='确定'
+					cancelText='取消'
 				>
-					<p>{}</p>
+					<Input 
+						value={this.props.updateName}
+						onChange={
+							(e)=>{this.props.handelChangeUpdateName(e.target.value)}
+						}
+					/>
 				</Modal>
 				</div>
 			</MyLayout>
@@ -135,8 +147,8 @@ const mapStateToProps=(state)=>{
 		total:state.get('category').get('total'),
 		pageSize:state.get('category').get('pageSize'),
 		list:state.get('category').get('list'),
-		updateModalVisible:state.get('category').get('updateModalVisible')
-
+		updateModalVisible:state.get('category').get('updateModalVisible'),
+		updateName:state.get('category').get('updateName')
 	}	
 }
 const mapDispatchToProps=(dispatch)=>{
@@ -146,6 +158,18 @@ const mapDispatchToProps=(dispatch)=>{
 		},
 		showUpdateModal:(updateId,updateName)=>{
 			dispatch(actionCreator.getShowUpdateModalAction(updateId,updateName));
+		},
+		handleCloseUpdateModal:()=>{
+			dispatch(actionCreator.getCloseUpdateModalAction());
+		},
+		handelChangeUpdateName:(values)=>{
+			dispatch(actionCreator.getChangeUpdateNameAction(values))
+		},
+		handleUpdateName:(pid)=>{
+			dispatch(actionCreator.getUpdateModalAction(pid))
+		},
+		handleOrder:(pid,id,newOrder)=>{
+			dispatch(actionCreator.getUpdateOrderModalAction(pid,id,newOrder))	
 		}
 	}
 }
