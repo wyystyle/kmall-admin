@@ -2,7 +2,15 @@ import * as types from './actionTypes.js';
 import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
-	isAddFetching:false,
+	parentCategoryId:'',
+	categoryId:'',
+	isSaveFetching:false,
+	images:'',
+	detal:'',
+	validateStatusValue:'',
+	validateStatusHelpValue:''
+
+/*	isAddFetching:false,
 	OneLevelCategories:[],
 	isPageFetching:false,
 	current:0,
@@ -11,10 +19,42 @@ const defaultState = fromJS({
 	list:[],
 	updateModalVisible:false,
 	updateId:'',
-	updateName:''
+	updateName:''*/
 })
 
 export default (state=defaultState,action)=>{
+	if(action.type === types.GET_CATEGORY){
+		return state.merge({
+			parentCategoryId:action.payload.parentCategoryId,
+			categoryId:action.payload.categoryId,
+			validateStatusValue:"",
+			validateStatusHelpValue:""
+		})		
+	}
+	if(action.type == types.GET_IMAGES){
+		return state.set('images',action.payload)
+	}
+	if(action.type == types.GET_IDETAL){
+		return state.set('detal',action.payload)
+	}
+	if(action.type == types.SAVE_REQUIRE){
+		return state.set('isSaveFetching',true)
+	}
+	if(action.type == types.SAVE_DONE){
+		return state.set('isSaveFetching',false)
+	}
+	if(action.type == types.SET_ERROR){
+		return state.merge({
+			validateStatusValue:"error",
+			validateStatusHelpValue:"请选择分类"
+		})
+	}
+
+
+
+
+
+
 	if(action.type == types.ADD_REQUIRE){
 		return state.set('isAddFetching',true)
 	}

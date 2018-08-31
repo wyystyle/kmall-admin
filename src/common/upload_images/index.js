@@ -1,17 +1,13 @@
 import React,{ Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
-class UploadPicture extends Component{
+class UploadImage extends Component{
 	constructor(props){
 		super(props);
 		this.state={
 			previewVisible: false,
 		    previewImage: '',
-		    fileList: [{
-		      uid: '-1',
-		      name: 'xxx.png',
-		      status: 'done',
-		      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-		    }]
+		    fileList:[]
+
 		}
 		this.handlePreview = this.handlePreview.bind(this)
 		this.handleChange = this.handleChange.bind(this)
@@ -24,7 +20,13 @@ class UploadPicture extends Component{
 	      previewVisible: true,
 	    });
 	}
-	handleChange({ fileList }){this.setState({ fileList })}
+	handleChange({ fileList }){
+		this.setState({ fileList },()=>{
+			this.props.getFileList(fileList.map((newfile)=>{
+				return newfile.response
+			}).join(','))
+		})
+	}
 	
 	render(){
 		const { previewVisible, previewImage, fileList } = this.state;
@@ -37,13 +39,14 @@ class UploadPicture extends Component{
 		return (
 			<div className="clearfix">
 	        <Upload
-	          action="//jsonplaceholder.typicode.com/posts/"
+	          action={this.props.action}
 	          listType="picture-card"
 	          fileList={fileList}
 	          onPreview={this.handlePreview}
 	          onChange={this.handleChange}
+	          withCredentials = { true }
 	        >
-	          {fileList.length >= 3 ? null : uploadButton}
+	          {fileList.length >= this.props.max ? null : uploadButton}
 	        </Upload>
 	        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
 	          <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -52,4 +55,4 @@ class UploadPicture extends Component{
 		)
 	}
 }
-export default UploadPicture
+export default UploadImage

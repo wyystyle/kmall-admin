@@ -4,8 +4,10 @@ import { Breadcrumb,Form, Input,Select,Button,InputNumber  } from "antd";
 import MyLayout from 'common/layout';
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
+import { uploadProductImageUrl,uploadDetalimageUrl } from 'api';
 import  CategorySlector  from './category-selector.js';
-import  UploadPicture  from 'common/add_img';
+import  UploadImage  from 'common/upload_images';
+import MySimditor from 'common/rich-simditor';
 
 
 const FormItem = Form.Item;
@@ -15,15 +17,13 @@ class Product_Save extends Component{
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	componentDidMount(){
+/*	componentDidMount(){
 		this.props.getLevelOneCategory()
-	}
+	}*/
 	handleSubmit (e){
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
-			if (!err) {
-				this.props.getAddRequire(values)	
-			}
+			this.props.getSaveRequire(err,values)
 		});
 	}	
 	render(){
@@ -89,10 +89,13 @@ class Product_Save extends Component{
 				        <FormItem
 				          {...formItemLayout}
 				          label="选择分类"
+				          required={true}
+				          validateStatus={this.props.validateStatusValue}
+				          help={this.props.validateStatusHelpValue}
 				        >
 				          <CategorySlector 
-				          	getCategoryId={(pid,id)=>{
-				          		console.log(pid,id)
+				          	getCategoryId={(parentCategoryId,categoryId)=>{
+				          		this.props.getCategory(parentCategoryId,categoryId)
 				          	}}
 				          />
 				        </FormItem>
@@ -136,13 +139,27 @@ class Product_Save extends Component{
 				          {...formItemLayout}
 				          label="商品图片"
 				        >
-				        	<UploadPicture />
+				        	<UploadImage 
+				        		action={uploadProductImageUrl}
+				        		max={3}
+				        		getFileList={(fileList)=>{
+				        			this.props.getImage(fileList)
+				        		}}
+				        	/>
 				        	
 				        </FormItem>
 				        <FormItem
-				          {...formItemLayout}
+				        {...formItemLayout}
 				          label="商品详情"
 				        >
+				        <MySimditor 
+				        	url = { uploadDetalimageUrl }
+				        	getDetal={
+				        		(value)=>{
+				        			this.props.getDetalValue(value)
+				        		}
+				        	}
+				        />
 
 				        </FormItem>
 				        <FormItem {...tailFormItemLayout}>
@@ -163,17 +180,26 @@ class Product_Save extends Component{
 }
 const mapStateToProps=(state)=>{
 	return {
-		isAddFetching:state.get('category').get('isAddFetching'),
-		OneLevelCategories:state.get('category').get('OneLevelCategories')	
+		isSeveFetching:state.get('product').get('isSaveFetching'),
+		validateStatusValue:state.get('product').get('validateStatusValue'),
+		validateStatusHelpValue:state.get('product').get('validateStatusHelpValue')
+		
+		
 	}	
 }
 const mapDispatchToProps=(dispatch)=>{
 	return {
-		getAddRequire:(values)=>{
-			dispatch(actionCreator.getAddAction(values))
+		getSaveRequire:(err,values)=>{
+			dispatch(actionCreator.getSaveAction(err,values))
 		},
-		getLevelOneCategory:()=>{
-			dispatch(actionCreator.getLevelOneCategoryAction())
+		getCategory:(parentCategoryId,categoryId)=>{
+			dispatch(actionCreator.getCategoryAction(parentCategoryId,categoryId))
+		},
+		getImage:(fileList)=>{
+			dispatch(actionCreator.getImageAction(fileList))
+		},
+		getDetalValue:(value)=>{
+			dispatch(actionCreator.getDetalValueAction(value))
 		}
 	}
 }

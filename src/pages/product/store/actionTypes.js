@@ -9,3 +9,11 @@ export const CLOSE_UPDATE_MODAL = 'category/CLOSE_UPDATE_MODAL';
 export const CHANGE_UPDATE_NAME_MODAL = 'category/CHANGE_UPDATE_NAME_MODAL';
 export const UPDATE_NAME_MODAL = 'category/UPDATE_NAME_MODAL';
 export const UPDATE_ORDER_MODAL = 'category/UPDATE_ORDER_MODAL';
+
+
+export const GET_CATEGORY = 'product/GET_CATEGORY';
+export const GET_IMAGES = 'product/GET_IMAGES';
+export const GET_IDETAL = 'product/GET_IDETAL';
+export const SAVE_REQUIRE = 'product/getaddrequire';
+export const SAVE_DONE = 'product/getadddone';
+export const SET_ERROR = 'product/SET_ERROR';

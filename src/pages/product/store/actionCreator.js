@@ -1,20 +1,97 @@
 import { message } from 'antd';
 import * as types from './actionTypes.js';
 import { Request,setUserName   } from 'util';
-import { getAddCategory,getLevelOneUrl,updataNameModal,updataOrderModal } from 'api';
+import { SaveUrl } from 'api';
 
-const getAddReq = ()=>{
+
+export const getCategoryAction = (parentCategoryId,categoryId)=>{
 	return {
-		type:types.ADD_REQUIRE
+		type:types.GET_CATEGORY,
+		payload:{
+			parentCategoryId:parentCategoryId,
+			categoryId:categoryId
+		}
 	}
 
 }
-const getAddDone = ()=>{
+export const getImageAction = (images)=>{
 	return {
-		type:types.ADD_DONE
+		type:types.GET_IMAGES,
+		payload:images
 	}
 
 }
+export const getDetalValueAction = (value)=>{
+	return {
+		type:types.GET_IDETAL,
+		payload:value
+	}
+
+}
+const getSaveReq = ()=>{
+	return {
+		type:types.SAVE_REQUIRE
+	}
+
+}
+const getSaveDone = ()=>{
+	return {
+		type:types.SAVE_DONE
+	}
+
+}
+export const setErrorAction = ()=>{
+	return {
+		type:types.SET_ERROR
+	}
+
+}
+export const getSaveAction = (err,values)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product');
+		const categoryId = state.get('categoryId');
+		if(!categoryId){
+			dispatch(setErrorAction())
+			return
+		}
+		if(err){
+			return
+		}
+		dispatch(getSaveReq())
+		Request({
+			method:'post',
+			url:SaveUrl,
+			data:{
+				...values,
+				images:state.get('images'),
+				detal:state.get('detal'),
+				parentCategoryId:state.get('parentCategoryId'),
+				categoryId:state.get('categoryId')
+			}
+		})
+
+		.then((result)=>{
+			if(result.code==0){
+				dispatch(getSaveDone())
+				console.log(result)
+			}
+			
+		})
+		
+		.catch((err)=>{
+			message.error('网络异常')
+			dispatch(getSaveDone())
+		})		
+	}
+
+}
+
+
+
+
+
+
+
 const SetLevelOneAction = (payload)=>{
 	return {
 		type:types.GET_LEVEL_ONE,
