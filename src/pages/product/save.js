@@ -16,10 +16,14 @@ class Product_Save extends Component{
 	constructor(props){
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.state={
+			productId:this.props.match.params.productId
+		}
 	}
-/*	componentDidMount(){
-		this.props.getLevelOneCategory()
-	}*/
+	componentDidMount(){
+
+		this.props.handleEditProduct(this.state.productId)
+	}  
 	handleSubmit (e){
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
@@ -27,6 +31,16 @@ class Product_Save extends Component{
 		});
 	}	
 	render(){
+		const {
+			images,
+			details,
+			parentCategoryId,
+			categoryId,
+			editName,
+			editSketch,
+			editPrice,
+			editShopnum
+		} = this.props;
 		const { getFieldDecorator } = this.props.form;
 		const formItemLayout = {
 	      labelCol: {
@@ -54,8 +68,8 @@ class Product_Save extends Component{
 			<MyLayout>
 				<div>
 					<Breadcrumb>
-						<Breadcrumb.Item>分类管理</Breadcrumb.Item>
-						<Breadcrumb.Item>添加分类</Breadcrumb.Item>
+						<Breadcrumb.Item>商品管理</Breadcrumb.Item>
+						<Breadcrumb.Item>添加商品</Breadcrumb.Item>
 					</Breadcrumb>
 					<Form style={{marginTop:30}}>
 				        <FormItem
@@ -66,6 +80,7 @@ class Product_Save extends Component{
 				            rules: [{
 				              required: true, message: '请输入分类名称',
 				            }],
+				            initialValue:editName
 				          })(
 				            <Input 
 				            	placeholder="商品分类"
@@ -80,6 +95,7 @@ class Product_Save extends Component{
 				            rules: [{
 				              required: true, message: '请输入商品描述信息',
 				            }],
+				            initialValue:editSketch
 				          })(
 				            <Input 
 				            	
@@ -107,6 +123,7 @@ class Product_Save extends Component{
 				            rules: [{
 				              required: true, message: '请输入商品价格',
 				            }],
+				            initialValue:editPrice
 				          })(
 		               <InputNumber
 					      min={0}
@@ -125,6 +142,7 @@ class Product_Save extends Component{
 				            rules: [{
 				              required: true, message: '请输入商品库存数量',
 				            }],
+				            initialValue:editShopnum
 				          })(
 		               <InputNumber
 					      min={0}
@@ -182,9 +200,15 @@ const mapStateToProps=(state)=>{
 	return {
 		isSeveFetching:state.get('product').get('isSaveFetching'),
 		validateStatusValue:state.get('product').get('validateStatusValue'),
-		validateStatusHelpValue:state.get('product').get('validateStatusHelpValue')
-		
-		
+		validateStatusHelpValue:state.get('product').get('validateStatusHelpValue'),
+		images:state.get('product').get('images'),
+		details:state.get('product').get('details'),
+		parentCategoryId:state.get('product').get('parentCategoryId'),
+		categoryId:state.get('product').get('categoryId'),
+		editName:state.get('product').get('editName'),
+		editSketch:state.get('product').get('editSketch'),
+		editPrice:state.get('product').get('editPrice'),
+		editShopnum:state.get('product').get('editShopnum')
 	}	
 }
 const mapDispatchToProps=(dispatch)=>{
@@ -200,6 +224,9 @@ const mapDispatchToProps=(dispatch)=>{
 		},
 		getDetalValue:(value)=>{
 			dispatch(actionCreator.getDetalValueAction(value))
+		},
+		handleEditProduct:(productId)=>{
+			dispatch(actionCreator.getEditProduct(productId))
 		}
 	}
 }

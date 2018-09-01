@@ -14,4 +14,7 @@ export const updataOrderModal = server + '/category/updateOrder'
 export const uploadProductImageUrl = server + '/product/uploadimage'
 export const uploadDetalimageUrl = server + '/product/uploadDetalimage'
 export const SaveUrl = server + '/product/save'
-
+export const getProductUrl = server + '/product'
+export const updataProductOrderModal = server + '/product/updateOrder'
+export const updataProductStatesModal = server + '/product/updateStates'
+export const getEditProductUrl = server + '/product/edit'

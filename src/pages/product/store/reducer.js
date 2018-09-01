@@ -6,20 +6,22 @@ const defaultState = fromJS({
 	categoryId:'',
 	isSaveFetching:false,
 	images:'',
-	detal:'',
+	details:'',
 	validateStatusValue:'',
-	validateStatusHelpValue:''
-
-/*	isAddFetching:false,
-	OneLevelCategories:[],
+	validateStatusHelpValue:'',
+	getProducts:[],
 	isPageFetching:false,
+
 	current:0,
 	total:0,
 	pageSize:0,
 	list:[],
-	updateModalVisible:false,
-	updateId:'',
-	updateName:''*/
+
+	editName:'',
+	editSketch:'',
+	editPrice:'',
+	editShopnum:''
+
 })
 
 export default (state=defaultState,action)=>{
@@ -32,10 +34,10 @@ export default (state=defaultState,action)=>{
 		})		
 	}
 	if(action.type == types.GET_IMAGES){
-		return state.set('images',action.payload)
+		return state.set('images',action.images)
 	}
 	if(action.type == types.GET_IDETAL){
-		return state.set('detal',action.payload)
+		return state.set('details',action.value)
 	}
 	if(action.type == types.SAVE_REQUIRE){
 		return state.set('isSaveFetching',true)
@@ -49,20 +51,35 @@ export default (state=defaultState,action)=>{
 			validateStatusHelpValue:"请选择分类"
 		})
 	}
-
-
-
-
-
-
-	if(action.type == types.ADD_REQUIRE){
-		return state.set('isAddFetching',true)
+	if(action.type == types.SET_PAGE){
+		return state.merge({
+			current:action.payload.current,
+			total:action.payload.total,
+			pageSize:action.payload.pageSize,
+			list:fromJS(action.payload.list)			
+		})
 	}
-	if(action.type == types.ADD_DONE){
-		return state.set('isAddFetching',false)
+	if(action.type == types.SET_EDIT_PRODUCT_ACTION){
+		return state.merge({
+			images:action.payload.images,
+			details:action.payload.details,
+			parentCategoryId:action.payload.CategoryId.pid,
+			categoryId:action.payload.CategoryId._id,
+			editName:action.payload.name,
+			editSketch:action.payload.Sketch,
+			editPrice:action.payload.price,
+			editShopnum:action.payload.shopnum
+
+		})
 	}
+
+
+
+
+
+
 	if(action.type == types.GET_LEVEL_ONE){
-		return state.set('OneLevelCategories',fromJS(action.payload))
+		return state.set('getProducts',fromJS(action.payload))
 	}
 	if(action.type == types.SET_PAGE){
 		return state.merge({

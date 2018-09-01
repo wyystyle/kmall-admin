@@ -1,7 +1,13 @@
 import { message } from 'antd';
 import * as types from './actionTypes.js';
 import { Request,setUserName   } from 'util';
-import { SaveUrl } from 'api';
+import { 
+	SaveUrl,
+	getProductUrl,
+	updataProductOrderModal,
+	updataProductStatesModal,
+	getEditProductUrl 
+} from 'api';
 
 
 export const getCategoryAction = (parentCategoryId,categoryId)=>{
@@ -17,14 +23,14 @@ export const getCategoryAction = (parentCategoryId,categoryId)=>{
 export const getImageAction = (images)=>{
 	return {
 		type:types.GET_IMAGES,
-		payload:images
+		images
 	}
 
 }
 export const getDetalValueAction = (value)=>{
 	return {
 		type:types.GET_IDETAL,
-		payload:value
+		value
 	}
 
 }
@@ -46,60 +52,6 @@ export const setErrorAction = ()=>{
 	}
 
 }
-export const getSaveAction = (err,values)=>{
-	return (dispatch,getState)=>{
-		const state = getState().get('product');
-		const categoryId = state.get('categoryId');
-		if(!categoryId){
-			dispatch(setErrorAction())
-			return
-		}
-		if(err){
-			return
-		}
-		dispatch(getSaveReq())
-		Request({
-			method:'post',
-			url:SaveUrl,
-			data:{
-				...values,
-				images:state.get('images'),
-				detal:state.get('detal'),
-				parentCategoryId:state.get('parentCategoryId'),
-				categoryId:state.get('categoryId')
-			}
-		})
-
-		.then((result)=>{
-			if(result.code==0){
-				dispatch(getSaveDone())
-				console.log(result)
-			}
-			
-		})
-		
-		.catch((err)=>{
-			message.error('网络异常')
-			dispatch(getSaveDone())
-		})		
-	}
-
-}
-
-
-
-
-
-
-
-const SetLevelOneAction = (payload)=>{
-	return {
-		type:types.GET_LEVEL_ONE,
-		payload
-	}
-
-}
-
 const getPageReq = ()=>{
 	return {
 		type:types.GET_PAGE_REQUIRE
@@ -120,49 +72,145 @@ const getSetPage = (payload)=>{
 
 }
 
-export const getAddAction = (values)=>{
-	return (dispatch)=>{
-		dispatch(getAddReq())
+export const getSaveAction = (err,values)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product');
+		const categoryId = state.get('categoryId');
+		if(!categoryId){
+			dispatch(setErrorAction())
+			return;
+		}
+		if(err){
+			return;
+		}
+		dispatch(getSaveReq())
 		Request({
 			method:'post',
-			url:getAddCategory,
-			data:values
-		})
-
-		.then((result)=>{
-			if(result.code == 0){
-				if(result.data){
-					dispatch(SetLevelOneAction(result.data))
-					
-				}
-					message.success('添加成功')
-			}else{
-				message.success('添加失败')
+			url:SaveUrl,
+			data:{
+				...values,
+				images:state.get('images'),
+				details:state.get('details'),
+				categoryId:categoryId
 			}
-			dispatch(getAddDone())
+		})
+		.then((result)=>{
+			if(result.code==0){
+				dispatch(getSaveDone())
+				window.location.href='/product'
+			}
+			
 		})
 		
 		.catch((err)=>{
 			message.error('网络异常')
-			dispatch(getAddDone())
+			dispatch(getSaveDone())
 		})		
 	}
 
 }
-export const getLevelOneCategoryAction = ()=>{
+export const getPageProductAction = (page)=>{
 	return (dispatch)=>{
-		dispatch(getPageDone())
+		dispatch(getPageReq())
 		Request({
 			method:'get',
-			url:getLevelOneUrl,
+			url:getProductUrl,
 			data:{
-				pid:0
+				page:page
 			}
 		})
 
 		.then((result)=>{
 			if(result.code == 0){
-				dispatch(SetLevelOneAction(result.data))
+				dispatch(getSetPage(result.data))
+			}else{
+				console.log('获取失败')
+			}
+			dispatch(getPageDone())
+		})
+		
+		.catch((err)=>{
+			message.error('网络异常')
+			dispatch(getPageDone())
+		})		
+	}
+
+}
+export const getUpdateOrderAction = (payload)=>{
+	return {
+		type:types.UPDATE_ORDER_MODAL,
+		payload
+	}
+}
+export const setEditProductAction = (payload)=>{
+	return {
+		type:types.SET_EDIT_PRODUCT_ACTION,
+		payload
+	}
+}
+export const getUpdateOrderModalAction = (id,newOrder)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product');
+		Request({
+			method:'put',
+			url:updataProductOrderModal,
+			data:{
+				id:id,
+				order:newOrder,
+				page:state.get('current'),
+			}
+		})
+		.then((result)=>{
+			if(result.code==0){
+				dispatch(getUpdateOrderAction(result.data))
+			}else{
+				message.error(result.message)
+			}
+		})
+		.catch((err)=>{
+			message.error('网络异常')
+		})		
+	}
+
+}
+export const getUpdateStatesModalAction = (id,newDefaultChecked)=>{
+	return (dispatch,getState)=>{
+		const state = getState().get('product');
+		Request({
+			method:'put',
+			url:updataProductStatesModal,
+			data:{
+				id:id,
+				states:newDefaultChecked,
+				page:state.get('current')
+			}
+		})
+		.then((result)=>{
+			if(result.code==0){
+				message.success(result.message)
+			}else{
+				message.error(result.message)
+				dispatch(getUpdateOrderAction(result.data))
+			}
+		})
+		.catch((err)=>{
+			message.error('网络异常')
+		})		
+	}
+
+}
+export const getEditProduct = (productId)=>{
+	return (dispatch)=>{
+		Request({
+			method:'get',
+			url:getEditProductUrl,
+			data:{
+				id:productId
+			}
+		})
+		.then((result)=>{
+			if(result.code == 0){
+				dispatch(setEditProductAction(result.data))
 			}else{
 				console.log('获取失败')
 			}
@@ -174,12 +222,26 @@ export const getLevelOneCategoryAction = ()=>{
 	}
 
 }
-export const getPageCategoryAction = (pid,page)=>{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*export const getPageCategoryAction = (pid,page)=>{
 	return (dispatch)=>{
 		dispatch(getPageReq())
 		Request({
 			method:'get',
-			url:getLevelOneUrl,
+			url:getProductUrl,
 			data:{
 				page:page,
 				pid:pid
@@ -201,40 +263,16 @@ export const getPageCategoryAction = (pid,page)=>{
 		})		
 	}
 
-}
-export const getShowUpdateModalAction = (updateId,updateName)=>{
-	return {
-		type:types.SHOW_UPDATE_MODAL,
-		payload:{
-			updateId,
-			updateName
-		}
-	}
-}
-export const getCloseUpdateModalAction = ()=>{
-	return {
-		type:types.CLOSE_UPDATE_MODAL
-	}
-}
-export const getChangeUpdateNameAction = (payload)=>{
-	return {
-		type:types.CHANGE_UPDATE_NAME_MODAL,
-		payload
-	}
-}
-export const getUpdateNameAction = (payload)=>{
-	return {
-		type:types.UPDATE_NAME_MODAL,
-		payload
-	}
-}
-export const getUpdateOrderAction = (payload)=>{
+}*/
+
+
+/*export const getUpdateOrderAction = (payload)=>{
 	return {
 		type:types.UPDATE_ORDER_MODAL,
 		payload
 	}
-}
-export const getUpdateModalAction = (pid)=>{
+}*/
+/*export const getUpdateModalAction = (pid)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('category');
 		Request({
@@ -261,8 +299,11 @@ export const getUpdateModalAction = (pid)=>{
 		})		
 	}
 
-}
-export const getUpdateOrderModalAction = (pid,id,newOrder)=>{
+}*/
+
+
+
+/*export const getUpdateOrderModalAction = (pid,id,newOrder)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('category');
 		Request({
@@ -287,6 +328,6 @@ export const getUpdateOrderModalAction = (pid,id,newOrder)=>{
 		})		
 	}
 
-}
+}*/
 
 

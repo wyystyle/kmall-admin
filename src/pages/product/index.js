@@ -10,7 +10,7 @@ class Product extends Component{
 		return(
 	
 			<Switch>
-				<Route path='/product/save' component={ ProductAdd } />
+				<Route path='/product/save/:productId?' component={ ProductAdd } />
 				<Route path='/product' component={ ProductList } />
 			</Switch>
 		)
