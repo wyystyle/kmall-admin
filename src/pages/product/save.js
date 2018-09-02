@@ -109,7 +109,9 @@ class Product_Save extends Component{
 				          validateStatus={this.props.validateStatusValue}
 				          help={this.props.validateStatusHelpValue}
 				        >
-				          <CategorySlector 
+				          <CategorySlector
+				            parentCategoryId={parentCategoryId}
+						    categoryId={categoryId} 
 				          	getCategoryId={(parentCategoryId,categoryId)=>{
 				          		this.props.getCategory(parentCategoryId,categoryId)
 				          	}}

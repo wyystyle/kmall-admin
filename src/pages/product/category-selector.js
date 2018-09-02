@@ -11,7 +11,9 @@ class CategorySlector extends Component{
 			levelOneCategories:[],
 			levelOneCategoryId:'',
 			levelTwoCategories:[],
-			levelTwoCategoryId:''
+			levelTwoCategoryId:'',
+			needTwoLevel:false,
+			isChanged:false
 		}
 		this.handleLevelOneChange=this.handleLevelOneChange.bind(this)
 		this.handleLevelTwoChange=this.handleLevelTwoChange.bind(this)
@@ -19,6 +21,41 @@ class CategorySlector extends Component{
 	componentDidMount(){
 
 		this.loadLevelOneCategory()
+	}
+	static getDerivedStateFromProps(props, state){
+		const leLevelOneChange = props.parentCategoryId != state.levelOneCategoryId;
+		const leLevelTwoChange = props.categoryId != state.levelTwoCategoryId;
+		if(!leLevelOneChange && !leLevelTwoChange){
+			return null
+		}
+		if(state.isChanged){
+			return null
+		}
+		if(props.parentCategoryId  == 0){
+			return {
+				levelOneCategoryId:props.categoryId,
+				levelTwoCategoryId:'',
+				isChanged:true
+			}
+		}else{
+				return {
+					levelOneCategoryId:props.parentCategoryId,
+					levelTwoCategoryId:props.categoryId,
+					needTwoLevel:true,
+					isChanged:true
+				}
+		}
+
+
+		return null
+	}
+	componentDidUpdate(){
+		if(this.state.needTwoLevel){
+			this.loadLevelTwoCategory();
+			this.setState({
+				needTwoLevel:false
+			})
+		}
 	}
 	loadLevelOneCategory(){
 		Request({
@@ -87,18 +124,24 @@ class CategorySlector extends Component{
 		return(
 			<div>
 		        <Select  
+		        	defaultValue={levelOneCategoryId}
+					value={levelOneCategoryId}
 		        	style={{ width: 300,marginRight:30 }} 
 		        	onChange={this.handleLevelOneChange}>
 		          	{levelOneOpations}
 		        </Select>
-		        <Select 
+		        {
+		        levelTwoOpations.length
+		        ? <Select 
 		        	defaultValue={levelTwoCategoryId}
 					value={levelTwoCategoryId}
 		        	style={{ width: 300 }} 
 		        	onChange={this.handleLevelTwoChange}
 		        	>
 		          {levelTwoOpations}
-		        </Select>
+		          </Select>
+		        : null  
+		        }
 		    </div>
 		)
 	}

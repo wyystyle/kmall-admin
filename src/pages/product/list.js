@@ -31,9 +31,21 @@ class ProductList extends Component{
 	}
 	componentDidMount(){
 		this.props.getPageData(1)
-	}                                              
+	}  
+/*	componentDidUpdate(){
+		this.props.getPageData(1)
+	}  */                                           
 	render(){
-		const pid = this.state.pid;
+		const data = this.props.list.map((product)=>{
+			return {
+				id:product.get('_id'),
+				key:product.get('_id'),
+				name:product.get('name'),
+				pid:product.get('pid'),
+				order:product.get('order'),
+				states:product.get('states')
+			}
+		}).toJS();
 		const columns = [{
 		  title: 'id',
 		  dataIndex: 'id',
@@ -89,17 +101,6 @@ class ProductList extends Component{
 		    </span>
 		  ),
 		}];
-		const data = this.props.list.map((product)=>{
-			return {
-				id:product.get('_id'),
-				key:product.get('_id'),
-				name:product.get('name'),
-				pid:product.get('pid'),
-				order:product.get('order'),
-				states:product.get('states')
-			}
-		}).toJS();
-		console.log('aaaa',data)
 		return(
 			<MyLayout>
 				<div>

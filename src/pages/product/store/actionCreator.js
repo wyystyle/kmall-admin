@@ -71,7 +71,6 @@ const getSetPage = (payload)=>{
 	}
 
 }
-
 export const getSaveAction = (err,values)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('product');
@@ -96,7 +95,7 @@ export const getSaveAction = (err,values)=>{
 		})
 		.then((result)=>{
 			if(result.code==0){
-				dispatch(getSaveDone())
+/*				dispatch(getSaveDone())*/
 				window.location.href='/product'
 			}
 			
@@ -190,7 +189,7 @@ export const getUpdateStatesModalAction = (id,newDefaultChecked)=>{
 				message.success(result.message)
 			}else{
 				message.error(result.message)
-				dispatch(getUpdateOrderAction(result.data))
+				dispatch(getSetPage(result.data))
 			}
 		})
 		.catch((err)=>{
