@@ -38,7 +38,7 @@ class App extends Component{
 		}
 		//return 只能返回一个
 		return(
-			<Router>
+			<Router forceRefresh = {true}>
 				<div className="App">
 					<Switch>	
 						<ProtectedRoute exact path="/" component={ Home } />

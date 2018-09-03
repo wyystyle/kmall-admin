@@ -13,6 +13,13 @@ class UploadImage extends Component{
 		this.handleChange = this.handleChange.bind(this)
 		this.handleCancel = this.handleCancel.bind(this)
 	}
+
+	static getDerivedStateFromProps(props, state){
+		if(props.fileList.length > 0 && state.fileList.length == 0){
+			return state.fileList=props.fileList
+		}
+			return null
+	}	
  	handleCancel(){this.setState({ previewVisible: false })}
 	handlePreview(file){
 	    this.setState({

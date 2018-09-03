@@ -6,7 +6,8 @@ import {
 	getProductUrl,
 	updataProductOrderModal,
 	updataProductStatesModal,
-	getEditProductUrl 
+	getEditProductUrl,
+	getSearchUrl 
 } from 'api';
 
 
@@ -71,6 +72,13 @@ const getSetPage = (payload)=>{
 	}
 
 }
+const getSetSearch = (payload)=>{
+	return {
+		type:types.SET_SEARCH,
+		payload
+	}
+
+}
 export const getSaveAction = (err,values)=>{
 	return (dispatch,getState)=>{
 		const state = getState().get('product');
@@ -83,8 +91,12 @@ export const getSaveAction = (err,values)=>{
 			return;
 		}
 		dispatch(getSaveReq())
+		let method = 'post';
+		if(values.id){	
+			method = 'put';
+		}
 		Request({
-			method:'post',
+			method:method,
 			url:SaveUrl,
 			data:{
 				...values,
@@ -187,6 +199,7 @@ export const getUpdateStatesModalAction = (id,newDefaultChecked)=>{
 		.then((result)=>{
 			if(result.code==0){
 				message.success(result.message)
+
 			}else{
 				message.error(result.message)
 				dispatch(getSetPage(result.data))
@@ -210,6 +223,31 @@ export const getEditProduct = (productId)=>{
 		.then((result)=>{
 			if(result.code == 0){
 				dispatch(setEditProductAction(result.data))
+			}else{
+				console.log('获取失败')
+			}
+		})
+		
+		.catch((err)=>{
+			message.error('网络异常')
+		})		
+	}
+
+}
+export const getSearchProductAction = (keyword,page)=>{
+	return (dispatch)=>{
+		Request({
+			method:'get',
+			url:getSearchUrl,
+			data:{
+				keyword,
+				page
+			}
+		})
+		.then((result)=>{
+			console.log('aaaaaa',result)
+			if(result.code == 0){
+				dispatch(getSetSearch(result.data))
 			}else{
 				console.log('获取失败')
 			}

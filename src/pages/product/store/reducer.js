@@ -20,7 +20,8 @@ const defaultState = fromJS({
 	editName:'',
 	editSketch:'',
 	editPrice:'',
-	editShopnum:''
+	editShopnum:'',
+	keyword:''
 
 })
 
@@ -70,6 +71,15 @@ export default (state=defaultState,action)=>{
 			editPrice:action.payload.price,
 			editShopnum:action.payload.shopnum
 
+		})
+	}
+	if(action.type == types.SET_SEARCH){
+		return state.merge({
+			keyword:action.payload.keyword,
+			current:action.payload.current,
+			total:action.payload.total,
+			pageSize:action.payload.pageSize,
+			list:fromJS(action.payload.list)			
 		})
 	}
 

@@ -1,23 +1,6 @@
-/*import React,{ Component } from 'react';
-import { Link } from 'react-router-dom';
-
-import MyLayout from 'common/layout';
-class ProductList extends Component{
-	render(){
-		return(
-			<MyLayout>
-				<div>
-					<Link to='/product/save'>add</Link>
-				</div>
-			</MyLayout>
-		)
-	}
-}
-export default 	ProductList;*/
-
 import React,{ Component } from 'react';
 import { Route,Link } from "react-router-dom";
-import { Breadcrumb,Button,Table,Divider,Tag,InputNumber,Modal,Input,Switch  } from "antd";
+import { Breadcrumb,Button,Table,Divider,Tag,InputNumber,Modal,Input,Switch } from "antd";
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
 import MyLayout from 'common/layout';
@@ -30,12 +13,14 @@ class ProductList extends Component{
 		}
 	}
 	componentDidMount(){
-		this.props.getPageData(1)
+			this.props.getPageData(1)
 	}  
 /*	componentDidUpdate(){
 		this.props.getPageData(1)
 	}  */                                           
-	render(){
+	render(){	
+		const Search = Input.Search;
+		const { keyword } =this.props; 
 		const data = this.props.list.map((product)=>{
 			return {
 				id:product.get('_id'),
@@ -43,7 +28,8 @@ class ProductList extends Component{
 				name:product.get('name'),
 				pid:product.get('pid'),
 				order:product.get('order'),
-				states:product.get('states')
+				states:product.get('states'),
+				keyword:product.get('keyword')
 			}
 		}).toJS();
 		const columns = [{
@@ -54,6 +40,15 @@ class ProductList extends Component{
 		  title: '商品名称	',
 		  dataIndex: 'name',
 		  key: 'name',
+		  render:(name,record)=>{
+		  	if(keyword){
+		  		let reg = new RegExp('('+keyword+')','ig');
+		  		let html = name.replace(reg,"<b style='color:red';>$1</b>");
+		  		return <span dangerouslySetInnerHTML={{__html:html}}></span>
+		  	}else{
+		  		return name
+		  	}
+		  }
 		},
 		{
 		  title: '状态',
@@ -95,7 +90,7 @@ class ProductList extends Component{
 
 				<span> 	
 		      		<Divider type="vertical" />
-		      		<Link to={"/product/save/"+record.id}>查看</Link>
+		      		<Link to={"/product/detail/"+record.id}>查看</Link>
 		      	 </span>
 		      
 		    </span>
@@ -108,6 +103,14 @@ class ProductList extends Component{
 						<Breadcrumb.Item>分类管理</Breadcrumb.Item>
 						<Breadcrumb.Item>分类列表</Breadcrumb.Item>
 					</Breadcrumb>
+					<Search
+				      placeholder="请输入关键字查询"
+				      enterButton="查询"
+				      style={{ width: 300,marginTop:20 }}
+				      onSearch={value =>{
+				      	this.props.getSearchData(value)
+				      }}
+				    />
 					<div style={{ marginTop:20 }} className="clearfix">
 						<h4 style={{float:"left"}}>商品列表</h4>
 						<Link to='/product/save'>
@@ -126,8 +129,12 @@ class ProductList extends Component{
 					}
 				}
 				onChange = {(pagination)=>{
-							this.props.getPageData(pagination.current)
-						}}
+					if(keyword){
+						this.props.getSearchData(keyword,pagination.current)
+					}else{
+						this.props.getPageData(pagination.current)
+					}
+				}}
 				loading = {
 					{
 						spinning:this.props.isPageFetching,
@@ -147,7 +154,8 @@ const mapStateToProps=(state)=>{
 		current:state.get('product').get('current'),
 		total:state.get('product').get('total'),
 		pageSize:state.get('product').get('pageSize'),
-		list:state.get('product').get('list')
+		list:state.get('product').get('list'),
+		keyword:state.get('product').get('keyword')
 	}	
 }
 const mapDispatchToProps=(dispatch)=>{
@@ -160,6 +168,9 @@ const mapDispatchToProps=(dispatch)=>{
 		},
 		handleChangeStates:(id,newDefaultChecked)=>{
 			dispatch(actionCreator.getUpdateStatesModalAction(id,newDefaultChecked))
+		},
+		getSearchData:(keyword,page)=>{
+			dispatch(actionCreator.getSearchProductAction(keyword,page))
 		}
 	}
 }

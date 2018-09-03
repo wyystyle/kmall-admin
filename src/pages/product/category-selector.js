@@ -19,12 +19,15 @@ class CategorySlector extends Component{
 		this.handleLevelTwoChange=this.handleLevelTwoChange.bind(this)
 	}
 	componentDidMount(){
-
 		this.loadLevelOneCategory()
 	}
 	static getDerivedStateFromProps(props, state){
 		const leLevelOneChange = props.parentCategoryId != state.levelOneCategoryId;
 		const leLevelTwoChange = props.categoryId != state.levelTwoCategoryId;
+		if(state.levelOneCategoryId && !props.parentCategoryId && !props.categoryId){
+			return null
+		}
+
 		if(!leLevelOneChange && !leLevelTwoChange){
 			return null
 		}
@@ -127,7 +130,9 @@ class CategorySlector extends Component{
 		        	defaultValue={levelOneCategoryId}
 					value={levelOneCategoryId}
 		        	style={{ width: 300,marginRight:30 }} 
-		        	onChange={this.handleLevelOneChange}>
+		        	onChange={this.handleLevelOneChange}
+		        	disabled={this.props.disabled}
+		        	>
 		          	{levelOneOpations}
 		        </Select>
 		        {
@@ -137,6 +142,7 @@ class CategorySlector extends Component{
 					value={levelTwoCategoryId}
 		        	style={{ width: 300 }} 
 		        	onChange={this.handleLevelTwoChange}
+		        	disabled={this.props.disabled}
 		        	>
 		          {levelTwoOpations}
 		          </Select>

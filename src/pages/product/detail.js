@@ -8,11 +8,11 @@ import { uploadProductImageUrl,uploadDetalimageUrl } from 'api';
 import  CategorySlector  from './category-selector.js';
 import  UploadImage  from 'common/upload_images';
 import MySimditor from 'common/rich-simditor';
-
+import './detail.css';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-class Product_Save extends Component{
+class Product_Detail extends Component{
 	constructor(props){
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,14 +43,13 @@ class Product_Save extends Component{
 			editShopnum
 		} = this.props;
 		const { getFieldDecorator } = this.props.form;
-		let fileList = [];
+		let uplodeImg = '';
 		if(images){
-			fileList = images.split(',').map((img,index)=>({
-			   uid: 'index',
-			   status: 'done', // 状态有：uploading done error removed
-			   response:img,
-			   url:img // 下载链接额外的 HTML 属性
-			}))
+			uplodeImg = images.split(',').map((img,index)=>(
+			   	<li key={index}>
+			   		<img src={img} />
+			   	</li>
+			))
 		}
 
 		const formItemLayout = {
@@ -81,10 +80,7 @@ class Product_Save extends Component{
 					<Breadcrumb>
 						<Breadcrumb.Item>商品管理</Breadcrumb.Item>
 						<Breadcrumb.Item>
-						{
-							(this.state.productId) ? '修改商品' : '添加商品'
-						}
-						
+							商品详情
 						</Breadcrumb.Item>
 					</Breadcrumb>
 					<Form style={{marginTop:30}}>
@@ -92,31 +88,19 @@ class Product_Save extends Component{
 				          {...formItemLayout}
 				          label="商品分类"
 				        >
-				          {getFieldDecorator('name', {
-				            rules: [{
-				              required: true, message: '请输入分类名称',
-				            }],
-				            initialValue:editName
-				          })(
 				            <Input 
-				            	placeholder="商品分类"
+				            	defaultValue={editName}
+				            	disabled={true}
 				            />
-				          )}
 				        </FormItem>
 				        <FormItem
 				          {...formItemLayout}
 				          label="商品描述"
 				        >
-				          {getFieldDecorator('Sketch', {
-				            rules: [{
-				              required: true, message: '请输入商品描述信息',
-				            }],
-				            initialValue:editSketch
-				          })(
 				            <Input 
-				            	
+				            	defaultValue={editSketch}
+				            	disabled={true}
 				            />
-				          )}
 				        </FormItem>
 				        <FormItem
 				          {...formItemLayout}
@@ -137,76 +121,42 @@ class Product_Save extends Component{
 				          {...formItemLayout}
 				          label="商品价格"
 				        >
-				          {getFieldDecorator('price', {
-				            rules: [{
-				              required: true, message: '请输入商品价格',
-				            }],
-				            initialValue:editPrice
-				          })(
 		               <InputNumber
-					      min={0}
+		               	  value={editPrice}
+				          disabled={true}
+				          key={editPrice}
 					      formatter={value => `${value}元`}
-					      parser={value => value.replace('元', '')}
 					      style={{ width: 300 }}
 					    />
-				          )}
 				        </FormItem>
 				        <FormItem
 				          {...formItemLayout}
 				          label="商品库存"
 				        >
-				          {getFieldDecorator('shopnum', {
-				            rules: [{
-				              required: true, message: '请输入商品库存数量',
-				            }],
-				            initialValue:editShopnum
-				          })(
 		               <InputNumber
-					      min={0}
+		              	  value={editShopnum}
+				          disabled={true}
 					      formatter={value => `${value}件`}
-					      parser={value => value.replace('件', '')}
+					      key={editShopnum}
 					      style={{ width: 300 }}
-					    />
-				          )}
-				        </FormItem>
+					    />				        
+					    </FormItem>
 				        <FormItem
 				          {...formItemLayout}
 				          label="商品图片"
 				        >
-				        	<UploadImage 
-				        		fileList={fileList}
-				        		action={uploadProductImageUrl}
-				        		max={3}
-				        		getFileList={(fileList)=>{
-				        			this.props.getImage(fileList)
-				        		}}
-				        	/>
+				        	<ul className="lodeImg">
+				        		{uplodeImg}
+				        	</ul>
 				        	
 				        </FormItem>
 				        <FormItem
 				        {...formItemLayout}
 				          label="商品详情"
 				        >
-				        <MySimditor
-				        	details={ details }
-				        	url = { uploadDetalimageUrl }
-				        	getDetal={
-				        		(value)=>{
-				        			this.props.getDetalValue(value)
-				        		}
-				        	}
-				        />
+				        <div dangerouslySetInnerHTML={{__html:details}}></div>
 
-				        </FormItem>
-				        <FormItem {...tailFormItemLayout}>
-				          <Button 
-					          type="primary"
-					          onClick={ this.handleSubmit }
-					          loading={this.props.isAddFetching}
-					          >
-					          提交
-				          </Button>
-				        </FormItem>				        					
+				        </FormItem>			        					
 					</Form>
 				</div>
 			</MyLayout>
@@ -248,5 +198,5 @@ const mapDispatchToProps=(dispatch)=>{
 		}
 	}
 }
-const ProductSave = Form.create()(Product_Save);
-export default connect(mapStateToProps,mapDispatchToProps)(ProductSave)
+const ProductDetail = Form.create()(Product_Detail);
+export default connect(mapStateToProps,mapDispatchToProps)(ProductDetail)

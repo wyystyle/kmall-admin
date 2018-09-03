@@ -7,6 +7,9 @@ import 'simditor/styles/simditor.css';
 class MySimditor extends Component{
 	constructor(props){
 		super(props);
+		this.state={
+			isLoaded:false
+		}
 		this.toolbar=
 		[
 		  'title',
@@ -46,9 +49,21 @@ class MySimditor extends Component{
   			}
 		});
 		this.editor.on('valuechanged',()=>{
-			this.props.getDetal(this.editor.getValue())
+			this.setState({
+				isLoaded:true
+			},()=>{
+				this.props.getDetal(this.editor.getValue())
+			})
 		})
 
+	}
+	componentDidUpdate(){
+		if(this.props.details && !this.state.isLoaded){
+			this.editor.setValue(this.props.details)
+			this.setState({
+				isLoaded:true
+			})
+		}
 	}
 
 	render(){

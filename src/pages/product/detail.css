@@ -1,0 +1,11 @@
+.lodeImg li{
+	list-style: none;
+	width: 100px;
+	height: 100px;
+	margin-left: 10px;
+	padding: 10px;
+	border: 1px solid #ccc;
+}
+.lodeImg li img{
+	width: 100%;
+}

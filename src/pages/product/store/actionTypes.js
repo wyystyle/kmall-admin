@@ -20,3 +20,4 @@ export const UPDATE_ORDER_MODAL = 'product/UPDATE_ORDER_MODAL';
 export const UPDATE_STATES_MODAL = 'product/UPDATE_STATES_MODAL';
 export const SET_PAGE = 'product/SET_PAGE';
 export const SET_EDIT_PRODUCT_ACTION = 'product/SET_EDIT_PRODUCT_ACTION';
+export const SET_SEARCH = 'product/SET_SEARCH';
