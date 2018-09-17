@@ -24,7 +24,7 @@ class Home extends Component{
 				  <Card title="用户数量" style={{ width: 300 }}>
 				    <p>{this.props.usernum}</p>
 				  </Card>
-				   <Card title="上架数量" style={{ width: 300 }}>
+				   <Card title="订单数量" style={{ width: 300 }}>
 				    <p>{this.props.ordernum}</p>
 				  </Card>
 				   <Card title="商品数量" style={{ width: 300 }}>

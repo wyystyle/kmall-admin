@@ -12,18 +12,20 @@ const defaultState = fromJS({
 	imagesvalidateStatusValue:'',
 	imagesvalidateStatusHelpValue:'',
 	getProducts:[],
-	isPageFetching:false,
-
-	current:0,
-	total:0,
-	pageSize:0,
-	list:[],
 
 	editName:'',
 	editSketch:'',
 	editPrice:'',
 	editShopnum:'',
-	keyword:''
+
+
+	isPageFetching:false,
+	current:0,
+	total:0,
+	pageSize:0,
+	list:[],
+	keyword:'',
+	orderDetail:{}
 
 })
 export default (state=defaultState,action)=>{
@@ -64,15 +66,8 @@ export default (state=defaultState,action)=>{
 			imagesvalidateStatusHelpValue:"请上传图片"
 		})
 	}
-	if(action.type == types.SET_PAGE){
-		return state.merge({
-			current:action.payload.current,
-			total:action.payload.total,
-			pageSize:action.payload.pageSize,
-			list:fromJS(action.payload.list)			
-		})
-	}
-	if(action.type == types.SET_EDIT_PRODUCT_ACTION){
+	
+	/*if(action.type == types.SET_EDIT_PRODUCT_ACTION){
 		return state.merge({
 			images:action.payload.images,
 			details:action.payload.details,
@@ -84,7 +79,7 @@ export default (state=defaultState,action)=>{
 			editShopnum:action.payload.shopnum
 
 		})
-	}
+	}*/
 	if(action.type == types.SET_SEARCH){
 		return state.merge({
 			keyword:action.payload.keyword,
@@ -94,7 +89,27 @@ export default (state=defaultState,action)=>{
 			list:fromJS(action.payload.list)			
 		})
 	}
-
+	//order
+	if(action.type == types.SET_ORDER_PAGE){
+		return state.merge({
+			current:action.payload.current,
+			total:action.payload.total,
+			pageSize:action.payload.pageSize,
+			list:fromJS(action.payload.list)			
+		})
+	}
+	if(action.type == types.GET_ORDER_DETAIL_ACTION){
+		return state.set('orderDetail',action.payload)
+	}
+	if(action.type == types.SET_ORDER_SEARCH){
+		return state.merge({
+			keyword:action.payload.keyword,
+			current:action.payload.current,
+			total:action.payload.total,
+			pageSize:action.payload.pageSize,
+			list:fromJS(action.payload.list)			
+		})
+	}
 
 
 

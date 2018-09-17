@@ -2,8 +2,11 @@ import { message } from 'antd';
 import * as types from './actionTypes.js';
 import { Request,setUserName   } from 'util';
 import { 
+	getOrderUrl,
+	getOrderSearchUrl,
+	getOrderDetailUrl,
+
 	SaveUrl,
-	getProductUrl,
 	updataProductOrderModal,
 	updataProductStatesModal,
 	getEditProductUrl,
@@ -73,14 +76,14 @@ const getPageDone = ()=>{
 }
 const getSetPage = (payload)=>{
 	return {
-		type:types.SET_PAGE,
+		type:types.SET_ORDER_PAGE,
 		payload
 	}
 
 }
-const getSetSearch = (payload)=>{
+const getOrderSetSearch = (payload)=>{
 	return {
-		type:types.SET_SEARCH,
+		type:types.SET_ORDER_SEARCH,
 		payload
 	}
 
@@ -135,12 +138,14 @@ export const getSaveAction = (err,values)=>{
 	}
 
 }
-export const getPageProductAction = (page)=>{
+
+//order
+export const getPageOrderAction = (page)=>{
 	return (dispatch)=>{
 		dispatch(getPageReq())
 		Request({
 			method:'get',
-			url:getProductUrl,
+			url:getOrderUrl,
 			data:{
 				page:page
 			}
@@ -168,9 +173,9 @@ export const getUpdateOrderAction = (payload)=>{
 		payload
 	}
 }
-export const setEditProductAction = (payload)=>{
+export const getOrderDetailAction = (payload)=>{
 	return {
-		type:types.SET_EDIT_PRODUCT_ACTION,
+		type:types.GET_ORDER_DETAIL_ACTION,
 		payload
 	}
 }
@@ -226,18 +231,19 @@ export const getUpdateStatesModalAction = (id,newDefaultChecked)=>{
 	}
 
 }
-export const getEditProduct = (productId)=>{
+export const getOrderCategoryAction = (orderNo)=>{
 	return (dispatch)=>{
 		Request({
 			method:'get',
-			url:getEditProductUrl,
+			url:getOrderDetailUrl,
 			data:{
-				id:productId
+				orderNo:orderNo
 			}
 		})
 		.then((result)=>{
+				console.log(result)
 			if(result.code == 0){
-				dispatch(setEditProductAction(result.data))
+				dispatch(getOrderDetailAction(result.data))
 			}else{
 				console.log('获取失败')
 			}
@@ -249,20 +255,21 @@ export const getEditProduct = (productId)=>{
 	}
 
 }
-export const getSearchProductAction = (keyword,page)=>{
+
+//order
+export const getSearchOrderAction = (keyword,page)=>{
 	return (dispatch)=>{
 		Request({
 			method:'get',
-			url:getSearchUrl,
+			url:getOrderSearchUrl,
 			data:{
 				keyword,
 				page
 			}
 		})
 		.then((result)=>{
-			console.log('aaaaaa',result)
 			if(result.code == 0){
-				dispatch(getSetSearch(result.data))
+				dispatch(getOrderSetSearch(result.data))
 			}else{
 				console.log('获取失败')
 			}
@@ -286,100 +293,5 @@ export const getSearchProductAction = (keyword,page)=>{
 
 
 
-
-
-/*export const getPageCategoryAction = (pid,page)=>{
-	return (dispatch)=>{
-		dispatch(getPageReq())
-		Request({
-			method:'get',
-			url:getProductUrl,
-			data:{
-				page:page,
-				pid:pid
-			}
-		})
-
-		.then((result)=>{
-			if(result.code == 0){
-				dispatch(getSetPage(result.data))
-			}else{
-				console.log('获取失败')
-			}
-			dispatch(getPageDone())
-		})
-		
-		.catch((err)=>{
-			message.error('网络异常')
-			dispatch(getPageDone())
-		})		
-	}
-
-}*/
-
-
-/*export const getUpdateOrderAction = (payload)=>{
-	return {
-		type:types.UPDATE_ORDER_MODAL,
-		payload
-	}
-}*/
-/*export const getUpdateModalAction = (pid)=>{
-	return (dispatch,getState)=>{
-		const state = getState().get('category');
-		Request({
-			method:'put',
-			url:updataNameModal,
-			data:{
-				id:state.get('updateId'),
-				name:state.get('updateName'),
-				page:state.get('current'),
-				pid:pid
-			}
-		})
-		.then((result)=>{
-			if(result.code==0){
-				dispatch(getUpdateNameAction(result.data))
-				dispatch(getCloseUpdateModalAction())
-
-			}else{
-				message.error(result.message)
-			}
-		})
-		.catch((err)=>{
-			message.error('网络异常')
-		})		
-	}
-
-}*/
-
-
-
-/*export const getUpdateOrderModalAction = (pid,id,newOrder)=>{
-	return (dispatch,getState)=>{
-		const state = getState().get('category');
-		Request({
-			method:'put',
-			url:updataOrderModal,
-			data:{
-				id:id,
-				order:newOrder,
-				page:state.get('current'),
-				pid:pid
-			}
-		})
-		.then((result)=>{
-			if(result.code==0){
-				dispatch(getUpdateOrderAction(result.data))
-			}else{
-				message.error(result.message)
-			}
-		})
-		.catch((err)=>{
-			message.error('网络异常')
-		})		
-	}
-
-}*/
 
 

@@ -87,7 +87,6 @@ class ProductList extends Component{
 		      		<Divider type="vertical" />
 		      		<Link to={"/product/save/"+record.id}>编辑</Link>
 		      	 </span>
-
 				<span> 	
 		      		<Divider type="vertical" />
 		      		<Link to={"/product/detail/"+record.id}>查看</Link>
@@ -114,7 +113,7 @@ class ProductList extends Component{
 					<div style={{ marginTop:20 }} className="clearfix">
 						<h4 style={{float:"left"}}>商品列表</h4>
 						<Link to='/product/save'>
-							 <Button type="primary" style={{float:"right"}}>新增分类</Button>
+							 <Button type="primary" style={{float:"right"}}>新增商品</Button>
 						</Link>
 					</div>
 				<Table				 

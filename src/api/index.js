@@ -19,3 +19,8 @@ export const updataProductOrderModal = server + '/product/updateOrder'
 export const updataProductStatesModal = server + '/product/updateStates'
 export const getEditProductUrl = server + '/product/edit'
 export const getSearchUrl = server + '/product/search'
+
+
+export const getOrderUrl = server + '/order/home/list'
+export const getOrderDetailUrl = server + '/order/home/detail'
+export const getOrderSearchUrl = server + '/order/home/search'

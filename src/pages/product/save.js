@@ -172,6 +172,9 @@ class Product_Save extends Component{
 				        <FormItem
 				          {...formItemLayout}
 				          label="商品图片"
+				          required={true}
+				          validateStatus={this.props.imagesvalidateStatusValue}
+				          help={this.props.imagesvalidateStatusHelpValue}
 				        >
 				        	<UploadImage 
 				        		fileList={fileList}
@@ -219,6 +222,8 @@ const mapStateToProps=(state)=>{
 		isSeveFetching:state.get('product').get('isSaveFetching'),
 		validateStatusValue:state.get('product').get('validateStatusValue'),
 		validateStatusHelpValue:state.get('product').get('validateStatusHelpValue'),
+		imagesvalidateStatusValue:state.get('product').get('imagesvalidateStatusValue'),
+		imagesvalidateStatusHelpValue:state.get('product').get('imagesvalidateStatusHelpValue'),
 		images:state.get('product').get('images'),
 		details:state.get('product').get('details'),
 		parentCategoryId:state.get('product').get('parentCategoryId'),

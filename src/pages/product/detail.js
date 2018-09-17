@@ -4,7 +4,6 @@ import { Breadcrumb,Form, Input,Select,Button,InputNumber  } from "antd";
 import MyLayout from 'common/layout';
 import { connect } from 'react-redux';
 import { actionCreator } from './store';
-import { uploadProductImageUrl,uploadDetalimageUrl } from 'api';
 import  CategorySlector  from './category-selector.js';
 import  UploadImage  from 'common/upload_images';
 import MySimditor from 'common/rich-simditor';
@@ -112,9 +111,7 @@ class Product_Detail extends Component{
 				          <CategorySlector
 				            parentCategoryId={parentCategoryId}
 						    categoryId={categoryId} 
-				          	getCategoryId={(parentCategoryId,categoryId)=>{
-				          		this.props.getCategory(parentCategoryId,categoryId)
-				          	}}
+				          	disabled={true}
 				          />
 				        </FormItem>
 				        <FormItem

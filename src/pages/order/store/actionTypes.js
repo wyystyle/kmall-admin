@@ -22,3 +22,10 @@ export const SET_PAGE = 'product/SET_PAGE';
 export const SET_EDIT_PRODUCT_ACTION = 'product/SET_EDIT_PRODUCT_ACTION';
 export const SET_SEARCH = 'product/SET_SEARCH';
 export const SET_IMAGES_ERROR = 'product/SET_IMAGES_ERROR';
+
+
+
+export const SET_ORDER_PAGE = 'order/SET_ORDER_PAGE';
+export const SET_ORDER_SEARCH = 'order/SET_ORDER_SEARCH';
+export const GET_ORDER_CATEGORY = 'order/GET_ORDER_CATEGORY';
+export const GET_ORDER_DETAIL_ACTION = 'order/GET_ORDER_DETAIL_ACTION';
