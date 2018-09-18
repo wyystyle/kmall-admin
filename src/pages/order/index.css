@@ -40,11 +40,14 @@ li{
 }
 .product-item {
 	height: 80px;
-/* 	line-height: 80px; */
+	line-height: 80px;
 	margin-bottom: 15px;
 	border: 1px solid #ddd;
 }
-
+.order-title .order-payment span:last-child{
+	color: red;
+	font-weight: bold;
+}
 .product-item .product-info img{
 	width: 60px;
 	height: 60px;

@@ -5,6 +5,7 @@ import {
 	getOrderUrl,
 	getOrderSearchUrl,
 	getOrderDetailUrl,
+	updateOrderDetailUrl,
 
 	SaveUrl,
 	updataProductOrderModal,
@@ -179,58 +180,7 @@ export const getOrderDetailAction = (payload)=>{
 		payload
 	}
 }
-export const getUpdateOrderModalAction = (id,newOrder)=>{
-	return (dispatch,getState)=>{
-		const state = getState().get('product');
-		Request({
-			method:'put',
-			url:updataProductOrderModal,
-			data:{
-				id:id,
-				order:newOrder,
-				page:state.get('current'),
-			}
-		})
-		.then((result)=>{
-			if(result.code==0){
-				dispatch(getUpdateOrderAction(result.data))
-			}else{
-				message.error(result.message)
-			}
-		})
-		.catch((err)=>{
-			message.error('网络异常')
-		})		
-	}
 
-}
-export const getUpdateStatesModalAction = (id,newDefaultChecked)=>{
-	return (dispatch,getState)=>{
-		const state = getState().get('product');
-		Request({
-			method:'put',
-			url:updataProductStatesModal,
-			data:{
-				id:id,
-				states:newDefaultChecked,
-				page:state.get('current')
-			}
-		})
-		.then((result)=>{
-			if(result.code==0){
-				message.success(result.message)
-
-			}else{
-				message.error(result.message)
-				dispatch(getSetPage(result.data))
-			}
-		})
-		.catch((err)=>{
-			message.error('网络异常')
-		})		
-	}
-
-}
 export const getOrderCategoryAction = (orderNo)=>{
 	return (dispatch)=>{
 		Request({
@@ -270,6 +220,30 @@ export const getSearchOrderAction = (keyword,page)=>{
 		.then((result)=>{
 			if(result.code == 0){
 				dispatch(getOrderSetSearch(result.data))
+			}else{
+				console.log('获取失败')
+			}
+		})
+		
+		.catch((err)=>{
+			message.error('网络异常')
+		})		
+	}
+
+}
+export const getOrderDeliverAction = (orderNo)=>{
+	return (dispatch)=>{
+		Request({
+			method:'put',
+			url:updateOrderDetailUrl,
+			data:{
+				orderNo:orderNo
+			}
+		})
+		.then((result)=>{
+				console.log(result)
+			if(result.code == 0){
+				dispatch(getOrderDetailAction(result.data))
 			}else{
 				console.log('获取失败')
 			}

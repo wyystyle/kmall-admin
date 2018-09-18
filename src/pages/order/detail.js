@@ -58,10 +58,6 @@ class Order_Detail extends Component{
 									<span className="lable">创建时间:</span>
 									<span className="text">{createdTime}</span>
 								</li>
-								<li className="order-status">
-									<span className="lable">订单状态:</span>
-									<span className="text">{statusDesc}</span>
-								</li>
 								<li className="order-man">
 									<span className="lable">收件人:</span>
 									<span className="text">{shipping.name}</span>
@@ -80,7 +76,11 @@ class Order_Detail extends Component{
 								</li>
 								<li className="order-payment">
 									<span className="lable">总计:</span>
-									<span className="text">{payment}</span>
+									<span className="text">￥{payment}元</span>
+								</li>
+								<li className="order-status">
+									<span className="lable">订单状态:</span>
+									<span className="text">{statusDesc}</span>
 								</li>
 								<li className="order-opreation">
 									{
@@ -89,12 +89,12 @@ class Order_Detail extends Component{
 										placement="top" 
 										title={"确定已发货"} 
 										onConfirm={()=>{
-											
+											this.props.handleOrderDeliver(orderNo)
 										}} 
 										okText="确定" 
 										cancelText="取消"
 										>
-										<Button>发货</Button>
+										<Button type="primary">发货</Button>
 										</Popconfirm>
 										: null
 									}
@@ -121,8 +121,10 @@ class Order_Detail extends Component{
 							productList.map((product,index)=>{
 								return <ul className="product-item" key="index">
 											<li className="product-info">
+												<a href={"/product/detail/"+product.productId}>
 													<img src={product.images.split(',')[0]} alt="" />
 													<span>{product.name}</span>
+												</a>
 											</li>
 											<li className="product-price">
 												￥{product.price}
@@ -159,6 +161,10 @@ const mapDispatchToProps=(dispatch)=>{
 		handleEditOrder:(orderNo)=>{
 			console.log(orderNo)
 			dispatch(actionCreator.getOrderCategoryAction(orderNo))
+		},
+		handleOrderDeliver:(orderNo)=>{
+			console.log(orderNo)
+			dispatch(actionCreator.getOrderDeliverAction(orderNo))
 		}
 	}
 }
